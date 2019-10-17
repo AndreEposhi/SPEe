@@ -30,5 +30,13 @@ namespace SPEe.Models
         {
             DadoGeracaoArquivo = $"ARQUIVOS DE {new DateTime().ToString("dd/MM/YYYY HH:mm:ss")}";
         }
+
+        public static IdentificacaoRegistro Create(IdentificacaoRegistro value)
+        {
+            return new IdentificacaoRegistro
+            {
+                VersaoLayout = value.VersaoLayout
+            };
+        }
     }
 }

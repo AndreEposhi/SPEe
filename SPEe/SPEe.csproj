@@ -58,6 +58,7 @@
     <Compile Include="Models\BloquetoSacado.cs" />
     <Compile Include="Models\CartaDestinatario.cs" />
     <Compile Include="Models\CartaRemetente.cs" />
+    <Compile Include="Models\CartaTelegrama.cs" />
     <Compile Include="Models\CartaTexto.cs" />
     <Compile Include="Models\IdentificacaoRegistro.cs" />
     <Compile Include="Models\TelegramaDestinatario.cs" />
