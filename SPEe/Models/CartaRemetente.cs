@@ -9,8 +9,24 @@ namespace SPEe.Models
     /// </summary>
     public class CartaRemetente : ModelBase
     {
+        #region Campos
+
         /// <summary>
-        /// Numeral
+        /// Utilizada para compor o registro
+        /// </summary>
+        private const int NumeralZero = 0;
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        private const string LiteralN = "N";
+
+        #endregion Campos
+
+        #region Propriedades
+
+        /// <summary>
+        /// Tipo de registro
         /// </summary>
         public override int Tipo => 4;
 
@@ -105,5 +121,7 @@ namespace SPEe.Models
         /// Código da imagem que será impressa no rodapé do Carta
         /// </summary>
         public string ImagemRodape { get; set; }
+
+        #endregion Propriedades
     }
 }

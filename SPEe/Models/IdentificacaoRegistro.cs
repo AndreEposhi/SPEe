@@ -9,7 +9,7 @@ namespace SPEe.Models
     public class IdentificacaoRegistro : ModelBase
     {
         /// <summary>
-        /// Numeral
+        /// Tipo de registro
         /// </summary>
         public override int Tipo => 0;
 

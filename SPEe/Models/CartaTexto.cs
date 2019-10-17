@@ -3,19 +3,19 @@
 namespace SPEe.Models
 {
     /// <summary>
-    /// Tipo de Registro: 2 (dois). Texto do Telegrama
+    /// Tipo de Registro: 5 (cinco). Texto da Carta
     /// </summary>
-    public class TelegramaTexto : ModelBase
+    public class CartaTexto : ModelBase
     {
         #region Propriedades
 
         /// <summary>
         /// Tipo de registro
         /// </summary>
-        public override int Tipo => 2;
+        public override int Tipo => 5;
 
         /// <summary>
-        /// Texto da mensagem
+        /// Texto da Mensagem
         /// </summary>
         public string Texto { get; set; }
 

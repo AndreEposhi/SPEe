@@ -53,7 +53,12 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Base\ModelBase.cs" />
+    <Compile Include="Models\BloquetoCedente.cs" />
+    <Compile Include="Models\BloquetoPagamento.cs" />
+    <Compile Include="Models\BloquetoSacado.cs" />
+    <Compile Include="Models\CartaDestinatario.cs" />
     <Compile Include="Models\CartaRemetente.cs" />
+    <Compile Include="Models\CartaTexto.cs" />
     <Compile Include="Models\IdentificacaoRegistro.cs" />
     <Compile Include="Models\TelegramaDestinatario.cs" />
     <Compile Include="Models\TelegramaRemetente.cs" />

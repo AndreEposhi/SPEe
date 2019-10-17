@@ -8,8 +8,32 @@ namespace SPEe.Models
     /// </summary>
     public class TelegramaDestinatario : ModelBase
     {
+        #region Campos
         /// <summary>
-        /// Numeral
+        /// Utilizada para compor o registro
+        /// </summary>
+        private const string LiteralT = "T";
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        private const string LiteralD = "D";
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        private const string LiteralN = "N";
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        private const int LiteralUm = 1; 
+        #endregion
+
+        #region Propriedades
+
+        /// <summary>
+        /// Tipo de registro
         /// </summary>
         public override int Tipo => 3;
 
@@ -48,5 +72,7 @@ namespace SPEe.Models
         /// Postal do Destinatário
         /// </summary>
         public int TipoDestino { get; set; }
+
+        #endregion Propriedade
     }
 }

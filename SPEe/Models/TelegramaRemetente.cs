@@ -9,8 +9,29 @@ namespace SPEe.Models
     /// </summary>
     public class TelegramaRemetente : ModelBase
     {
+        #region Campos
+
         /// <summary>
-        /// Numeral
+        /// Utilizada para compor o registro
+        /// </summary>
+        private const int NumeralZero = 0;
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        private const int NumeralUm = 1;
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        private const string LiteralN = "N";
+
+        #endregion Campos
+
+        #region Propriedades
+
+        /// <summary>
+        /// Tipo de registro
         /// </summary>
         public override int Tipo => 1;
 
@@ -28,7 +49,7 @@ namespace SPEe.Models
         /// Número inteiro, usado como chave única para identificação de cada Remetente
         /// </summary>
         public int? OIDRemetente { get; set; }
-        
+
         public Nominal Nominal { get; set; }
 
         /// <summary>
@@ -111,5 +132,7 @@ namespace SPEe.Models
         /// Informar o caractere 1 no caso de destinatário internacional e 0 no caso de destinatário nacional
         /// </summary>
         public bool Internacional { get; set; }
+
+        #endregion Propriedades
     }
 }

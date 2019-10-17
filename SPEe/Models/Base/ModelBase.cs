@@ -5,9 +5,13 @@
     /// </summary>
     public abstract class ModelBase
     {
+        #region Propriedades
+
         /// <summary>
-        /// Numeral
+        /// Tipo registro
         /// </summary>
         public abstract int Tipo { get; }
+
+        #endregion Propriedades
     }
 }
