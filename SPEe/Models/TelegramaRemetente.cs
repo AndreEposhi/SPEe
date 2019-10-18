@@ -1,6 +1,7 @@
 ﻿using SPEe.Models.Base;
 using SPEe.ValueObjects;
 using System;
+using System.Collections.Generic;
 
 namespace SPEe.Models
 {
@@ -133,6 +134,51 @@ namespace SPEe.Models
         /// </summary>
         public bool Internacional { get; set; }
 
+        /// <summary>
+        /// Tipo de Registro: 2 (dois). Texto do Telegrama
+        /// </summary>
+        public TelegramaTexto TelegramaTexto { get; set; }
+
+        /// <summary>
+        /// Coleção do Tipo de Registro: 3 (três). Dados do(s) Destinatário(s) do Telegrama
+        /// </summary>
+        public IList<TelegramaDestinatario> TelegramaDestinatarios { get; set; }
+
         #endregion Propriedades
+
+        #region Construtor
+
+        /// <summary>
+        /// Instancia a classe e inicializa as variáveis
+        /// </summary>
+        public TelegramaRemetente()
+        {
+            OID = new Random().Next(999999999);
+            TelegramaDestinatarios = new List<TelegramaDestinatario>();
+        }
+
+        #endregion Construtor
+
+        /// <summary>
+        /// Cria um registo de dados do telegrama e do remetente
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static TelegramaRemetente Create(TelegramaRemetente value)
+        {
+            var result = new TelegramaRemetente();
+            result.Assunto = value.Assunto;
+            result.OIDRemetente = value.OIDRemetente;
+            result.Nominal = value.Nominal;
+            result.Endereco = value.Endereco;
+            result.Telefone = value.Telefone;
+            result.Email = value.Email;
+            result.DataEnvio = value.DataEnvio;
+            result.DataCadastro = value.DataCadastro;
+            result.SRVCC = value.SRVCC;
+            result.SRVPC = value.SRVPC;
+
+            return result;
+        }
     }
 }
