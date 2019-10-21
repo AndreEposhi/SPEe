@@ -1,6 +1,7 @@
 ﻿using SPEe.Models.Base;
 using SPEe.ValueObjects;
 using System;
+using System.Collections.Generic;
 
 namespace SPEe.Models
 {
@@ -9,20 +10,6 @@ namespace SPEe.Models
     /// </summary>
     public class CartaRemetente : ModelBase
     {
-        #region Campos
-
-        /// <summary>
-        /// Utilizada para compor o registro
-        /// </summary>
-        private const int NumeralZero = 0;
-
-        /// <summary>
-        /// Utilizada para compor o registro
-        /// </summary>
-        private const string LiteralN = "N";
-
-        #endregion Campos
-
         #region Propriedades
 
         /// <summary>
@@ -68,7 +55,7 @@ namespace SPEe.Models
         /// <summary>
         /// Data em que o Telegrama foi disponibilizado para envio (dd/mm/aaaa)
         /// </summary>
-        public DateTime DataEnvio { get; set; }
+        public DateTime? DataEnvio { get; set; }
 
         /// <summary>
         /// Data em que o Telegrama foi criado(dd/mm/aaaa)
@@ -122,6 +109,81 @@ namespace SPEe.Models
         /// </summary>
         public string ImagemRodape { get; set; }
 
+        /// <summary>
+        /// Tipo de Registro: 5 (cinco). Texto da Carta
+        /// </summary>
+        public CartaTexto Texto { get; set; }
+
+        /// <summary>
+        /// Coleção de registro do tipo Dados do(s) Destinatário(s) da Carta
+        /// </summary>
+        public IList<CartaDestinatario> Destinatarios { get; set; }
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        public int NumeralZero => 0;
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        public string LiteralN => "N";
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        public string LiteralBR => "BR";
+
         #endregion Propriedades
+
+        #region Construtor
+
+        /// <summary>
+        /// Instancia a classe e inicializa os objetos
+        /// </summary>
+        public CartaRemetente()
+        {
+            OID = new Random().Next(999999999);
+            Destinatarios = new List<CartaDestinatario>();
+        }
+
+        #endregion Construtor
+
+        /// <summary>
+        /// Cria um objeto do tipo Dados do(s) Destinatário(s) da Carta
+        /// </summary>
+        /// <param name="value">Informações do Dados do(s) Destinatário(s) da Carta</param>
+        /// <returns></returns>
+        public static CartaRemetente Create(CartaRemetente value)
+        {
+            var result = new CartaRemetente();
+            result.Assunto = value.Assunto.Length > 60 ? value.Assunto?.Substring(0, 60) : value.Assunto;
+            result.OIDRemetente = Convert.ToInt32(value.OIDRemetente.ToString().PadLeft(9, '0'));
+            result.Nominal = value.Nominal;
+            result.Endereco = value.Endereco;
+            result.Telefone = value.Telefone;
+            result.Email = value.Email?.Length > 50 ? value.Email?.Substring(0, 50) : value.Email;
+            result.DataEnvio = value.DataEnvio;
+            result.DataCadastro = value.DataCadastro;
+            result.IndicadorNomeFonte = value.IndicadorNomeFonte;
+            result.IndicadorEntreLinhas = value.IndicadorEntreLinhas;
+            result.IndicadorEstiloFonte = value.IndicadorEstiloFonte;
+            result.IndicadorTamnhoFonte = value.IndicadorTamnhoFonte;
+            result.SVRAR = value.SVRAR?.Length > 1 ? value.SVRAR?.Substring(0, 1) : value.SVRAR;
+            result.Usuario = value.Usuario?.Length > 40 ? value.Usuario?.Substring(0, 40) : value.Usuario;
+            result.Internacional = value.Internacional;
+            result.ImgemCabecalho = value.ImgemCabecalho?.Length > 10 ? value.ImgemCabecalho?.Substring(0, 10) : value.ImgemCabecalho;
+            result.ImagemRodape = value.ImagemRodape?.Length > 10 ? value.ImagemRodape?.Substring(0, 10) : value.ImagemRodape;
+
+            result.Texto = value.Texto;
+
+            foreach (var destinatario in result.Destinatarios)
+            {
+                destinatario.OID = result.OID;
+                result.Destinatarios.Add(destinatario);
+            }
+
+            return result;
+        }
     }
 }

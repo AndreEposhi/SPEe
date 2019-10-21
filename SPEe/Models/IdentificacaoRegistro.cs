@@ -21,14 +21,14 @@ namespace SPEe.Models
         /// <summary>
         /// Parâmetro opcional. Valor numérico que identifica a versão do layout do arquivo. Valores válidos: 1 e 2.
         /// </summary>
-        public int? VersaoLayout { get; set; }
+        public string VersaoLayout { get; set; }
 
         /// <summary>
         /// Instancia a classe e inicializa as variáveis
         /// </summary>
         public IdentificacaoRegistro()
         {
-            DadoGeracaoArquivo = $"ARQUIVOS DE {new DateTime().ToString("dd/MM/YYYY HH:mm:ss")}";
+            DadoGeracaoArquivo = $"ARQUIVOS DE {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}";
         }
 
         public static IdentificacaoRegistro Create(IdentificacaoRegistro value)

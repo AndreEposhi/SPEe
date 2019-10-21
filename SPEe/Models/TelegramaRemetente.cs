@@ -10,25 +10,6 @@ namespace SPEe.Models
     /// </summary>
     public class TelegramaRemetente : ModelBase
     {
-        #region Campos
-
-        /// <summary>
-        /// Utilizada para compor o registro
-        /// </summary>
-        private const int NumeralZero = 0;
-
-        /// <summary>
-        /// Utilizada para compor o registro
-        /// </summary>
-        private const int NumeralUm = 1;
-
-        /// <summary>
-        /// Utilizada para compor o registro
-        /// </summary>
-        private const string LiteralN = "N";
-
-        #endregion Campos
-
         #region Propriedades
 
         /// <summary>
@@ -71,7 +52,7 @@ namespace SPEe.Models
         /// <summary>
         /// Data em que o Telegrama foi disponibilizado para envio (dd/mm/aaaa)
         /// </summary>
-        public DateTime DataEnvio { get; set; }
+        public DateTime? DataEnvio { get; set; }
 
         /// <summary>
         /// Data em que o Telegrama foi criado(dd/mm/aaaa)
@@ -106,7 +87,7 @@ namespace SPEe.Models
         /// <summary>
         /// Dia, Mês, Ano, Hora, Minuto e Segundo para os serviços de data e hora(dd/mm/aaaa hh:00:00)
         /// </summary>
-        public string DataPredatado { get; set; }
+        public DateTime? DataPredatado { get; set; }
 
         /// <summary>
         /// Código da imagem que será impressa no cabeçalho do Telegrama
@@ -135,14 +116,34 @@ namespace SPEe.Models
         public bool Internacional { get; set; }
 
         /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        public int NumeralZero => 0;
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        public int NumeralUm => 1;
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        public string LiteralN => "N";
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        public string LiteralBR = "BR";
+
+        /// <summary>
         /// Tipo de Registro: 2 (dois). Texto do Telegrama
         /// </summary>
-        public TelegramaTexto TelegramaTexto { get; set; }
+        public TelegramaTexto Texto { get; set; }
 
         /// <summary>
         /// Coleção do Tipo de Registro: 3 (três). Dados do(s) Destinatário(s) do Telegrama
         /// </summary>
-        public IList<TelegramaDestinatario> TelegramaDestinatarios { get; set; }
+        public IList<TelegramaDestinatario> Destinatarios { get; set; }
 
         #endregion Propriedades
 
@@ -154,7 +155,7 @@ namespace SPEe.Models
         public TelegramaRemetente()
         {
             OID = new Random().Next(999999999);
-            TelegramaDestinatarios = new List<TelegramaDestinatario>();
+            Destinatarios = new List<TelegramaDestinatario>();
         }
 
         #endregion Construtor
@@ -167,16 +168,31 @@ namespace SPEe.Models
         public static TelegramaRemetente Create(TelegramaRemetente value)
         {
             var result = new TelegramaRemetente();
-            result.Assunto = value.Assunto;
-            result.OIDRemetente = value.OIDRemetente;
+            result.Assunto = value.Assunto.Length > 60 ? value.Assunto?.Substring(0, 60) : value.Assunto;
+            result.OIDRemetente = Convert.ToInt32(value.OIDRemetente.ToString().PadLeft(9, '0'));
             result.Nominal = value.Nominal;
             result.Endereco = value.Endereco;
             result.Telefone = value.Telefone;
-            result.Email = value.Email;
+            result.Email = value.Email?.Length > 50 ? value.Email?.Substring(0, 50) : value.Email;
             result.DataEnvio = value.DataEnvio;
             result.DataCadastro = value.DataCadastro;
-            result.SRVCC = value.SRVCC;
-            result.SRVPC = value.SRVPC;
+            result.SRVCC = value.SRVCC?.Length > 1 ? value.SRVCC?.Substring(0, 1) : value.SRVCC;
+            result.SRVPC = value.SRVPC?.Length > 1 ? value.SRVPC?.Substring(0, 1) : value.SRVPC;
+            result.SRVPH = value.SRVPH?.Length > 1 ? value.SRVPH?.Substring(0, 1) : value.SRVPH;
+            result.SRVDH = value.SRVDH?.Length > 1 ? value.SRVDH?.Substring(0, 1) : value.SRVDH;
+            result.DataPredatado = value.DataPredatado;
+            result.ImgemCabecalho = value.ImgemCabecalho?.Length > 10 ? value.ImgemCabecalho?.Substring(0, 10) : value.ImgemCabecalho;
+            result.ImagemRodape = value.ImagemRodape?.Length > 10 ? value.ImagemRodape?.Substring(0, 10) : value.ImagemRodape;
+            result.RetornoServico = value.RetornoServico?.Length > 1 ? value.RetornoServico?.Substring(0, 1) : value.RetornoServico;
+            result.Usuario = value.Usuario?.Length > 40 ? value.Usuario?.Substring(0, 40) : value.Usuario;
+            result.Internacional = value.Internacional;
+            result.Texto = value.Texto;
+
+            foreach (var destinatario in value.Destinatarios)
+            {
+                destinatario.OID = result.OID;
+                result.Destinatarios.Add(destinatario);
+            }
 
             return result;
         }

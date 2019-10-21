@@ -20,5 +20,22 @@ namespace SPEe.Models
         public string Texto { get; set; }
 
         #endregion Propriedades
+
+        #region Métodos
+
+        /// <summary>
+        /// Cria um obejto do tipo TelegramaTexto
+        /// </summary>
+        /// <param name="value">Informações do texto do telegrama</param>
+        /// <returns></returns>
+        public static TelegramaTexto Create(TelegramaTexto value)
+        {
+            return new TelegramaTexto
+            {
+                Texto = value.Texto
+            };
+        }
+
+        #endregion Métodos
     }
 }

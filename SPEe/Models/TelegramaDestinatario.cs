@@ -1,5 +1,6 @@
 ﻿using SPEe.Models.Base;
 using SPEe.ValueObjects;
+using System.Collections.Generic;
 
 namespace SPEe.Models
 {
@@ -8,28 +9,6 @@ namespace SPEe.Models
     /// </summary>
     public class TelegramaDestinatario : ModelBase
     {
-        #region Campos
-        /// <summary>
-        /// Utilizada para compor o registro
-        /// </summary>
-        private const string LiteralT = "T";
-
-        /// <summary>
-        /// Utilizada para compor o registro
-        /// </summary>
-        private const string LiteralD = "D";
-
-        /// <summary>
-        /// Utilizada para compor o registro
-        /// </summary>
-        private const string LiteralN = "N";
-
-        /// <summary>
-        /// Utilizada para compor o registro
-        /// </summary>
-        private const int LiteralUm = 1; 
-        #endregion
-
         #region Propriedades
 
         /// <summary>
@@ -73,6 +52,62 @@ namespace SPEe.Models
         /// </summary>
         public int TipoDestino { get; set; }
 
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        public string LiteralT => "T";
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        public string LiteralD => "D";
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        public string LiteralN => "N";
+
+        /// <summary>
+        /// Utilizada para compor o registro
+        /// </summary>
+        public int NumeralUm => 1;
+
         #endregion Propriedade
+
+        /// <summary>
+        /// Cria um objeto de Dados do(s) Destinatário(s) do Telegrama
+        /// </summary>
+        /// <param name="value">Informações do destinatário do telegrama</param>
+        /// <returns></returns>
+        public static TelegramaDestinatario Create(TelegramaDestinatario value)
+        {
+            return new TelegramaDestinatario
+            {
+                OIDContato = value.OIDContato,
+                Nominal = value.Nominal,
+                Endereco = value.Endereco,
+                Telefone = value.Telefone,
+                Email = value.Email?.Length > 50 ? value.Email?.Substring(0, 50) : value.Email,
+                TipoDestino = value.TipoDestino
+            };
+        }
+
+        /// <summary>
+        /// Cria uma coleção de objeto de Dados do(s) Destinatário(s) do Telegrama
+        /// </summary>
+        /// <param name="values">Coleção de Dados do(s) Destinatário(s) do Telegrama</param>
+        /// <returns></returns>
+        public static IList<TelegramaDestinatario> Create(IList<TelegramaDestinatario> values)
+        {
+            var result = new List<TelegramaDestinatario>();
+
+            foreach (var destinatario in values)
+            {
+                var destinarioResult = Create(destinatario);
+                result.Add(destinarioResult);
+            }
+
+            return result;
+        }
     }
 }
