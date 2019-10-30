@@ -120,6 +120,20 @@ namespace SPEe.Models
         public IList<CartaDestinatario> Destinatarios { get; set; }
 
         /// <summary>
+        /// Tipo de Registro: 7 (sete). Dados do cedente do Bloqueto
+        /// </summary>
+        public BloquetoCedente Cedente { get; set; }
+        /// <summary>
+        /// Tipo de Registro: 8 (oito). Texto para Instruções de Pagamento do Bloqueto
+        /// </summary>
+        public BloquetoPagamento Pagamento { get; set; }
+
+        /// <summary>
+        /// Coleção do Tipo de Registro: 9 (nove). Dados do sacado do Bloqueto
+        /// </summary>
+        public IList<BloquetoSacado> Sacados { get; set; }
+
+        /// <summary>
         /// Utilizada para compor o registro
         /// </summary>
         public int NumeralZero => 0;
@@ -145,6 +159,7 @@ namespace SPEe.Models
         {
             OID = new Random().Next(999999999);
             Destinatarios = new List<CartaDestinatario>();
+            Sacados = new List<BloquetoSacado>();
         }
 
         #endregion Construtor
@@ -177,11 +192,14 @@ namespace SPEe.Models
 
             result.Texto = value.Texto;
 
-            foreach (var destinatario in result.Destinatarios)
+            foreach (var destinatario in value.Destinatarios)
             {
                 destinatario.OID = result.OID;
                 result.Destinatarios.Add(destinatario);
             }
+
+            foreach (var sacado in value.Sacados)
+                result.Sacados.Add(sacado);
 
             return result;
         }

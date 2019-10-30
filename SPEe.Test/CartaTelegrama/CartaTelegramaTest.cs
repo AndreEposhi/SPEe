@@ -102,5 +102,90 @@ namespace SPEe.Test.CartaTelegrama
             telegrama.TelegramaRemetentes.Add(telegramaRemetente);
             telegrama.Gerar();
         }
+
+        [TestMethod]
+        public void CartaTest()
+        {
+            var carta = new Models.CartaTelegrama();
+            var identificador = Models.IdentificacaoRegistro.Create(new Models.IdentificacaoRegistro());
+
+            carta.IdentificacaoRegistro = identificador;
+
+            var cartaRemetente = Models.CartaRemetente.Create(new Models.CartaRemetente
+            {
+                Assunto = "Assunto carta",
+                OIDRemetente = new Random().Next(),
+                Nominal = ValueObjects.Nominal.Create(new ValueObjects.Nominal
+                {
+                    Apelido = "Apelido carta",
+                    Titulo = "Título carta",
+                    Nome = "Nome carta"
+                }),
+                Endereco = ValueObjects.Endereco.Create(new ValueObjects.Endereco
+                {
+                    CEP = 87707070,
+                    Logradouro = "Rua Altino da Silva Azeredo",
+                    Numero = "482",
+                    Complemento = "Próximo Igreja São Paulo",
+                    Bairro = "Alvorada do Sul",
+                    Cidade = "Paranavaí",
+                    UF = "PR"
+                }),
+                Telefone = ValueObjects.Telefone.Create(new ValueObjects.Telefone
+                {
+                    DDD = "(44)",
+                    Numero = "99937-1976"
+                }),
+                Email = "teste@teste.com.br",
+                DataEnvio = DateTime.Now,
+                DataCadastro = DateTime.Now,
+                SVRAR = "S",
+                Usuario = "Joana",
+                Internacional = false,
+
+                Texto = new Models.CartaTexto
+                {
+                    Texto = "Texto da carta linha 1" + Environment.NewLine +
+                    "Texto da carta linha 2" + Environment.NewLine +
+                    "Texto da carta linha 3" + Environment.NewLine +
+                    "Texto da carta linha 4" + Environment.NewLine +
+                    "Texto da carta linha 5"
+                },
+
+                Destinatarios = new List<Models.CartaDestinatario>
+                {
+                    new Models.CartaDestinatario
+                    {
+                        OIDContato = new Random().Next(),
+                        Nominal = ValueObjects.Nominal.Create( new ValueObjects.Nominal
+                        {
+                            Apelido = "Apelido Registro 3",
+                            Titulo = "Título Registro 3",
+                            Nome = "Nome Registro 3"
+                        }),
+                        Endereco = ValueObjects.Endereco.Create(new ValueObjects.Endereco
+                        {
+                            CEP = 87707040,
+                            Logradouro = "Rua José Fracarolli",
+                            Numero = "111",
+                            Bairro = "Monções II",
+                            Cidade = "Paranavaí",
+                            UF = "PR",
+                            Pais = "BR"
+                        }),
+                        Telefone = ValueObjects.Telefone.Create(new ValueObjects.Telefone
+                        {
+                            DDD = "(44)",
+                            Numero = "99999-4578",
+                        }),
+                        Email = "teste1@teste.com.br",
+                        TipoDestino = 0
+                    }
+                }
+            });
+
+            carta.CartaRemetentes.Add(cartaRemetente);
+            carta.Gerar();
+        }
     }
 }

@@ -20,5 +20,20 @@ namespace SPEe.Models
         public string Instrucao { get; set; }
 
         #endregion Propriedades
+
+        #region Métodos
+        /// <summary>
+        /// Cria um registro do tipo instruções do pagamento do bloqueto
+        /// </summary>
+        /// <param name="value">Informações do pagamento do bloqueto</param>
+        /// <returns></returns>
+        public static BloquetoPagamento Create(BloquetoPagamento value)
+        {
+            return new BloquetoPagamento
+            {
+                Instrucao = value.Instrucao
+            };
+        } 
+        #endregion
     }
 }

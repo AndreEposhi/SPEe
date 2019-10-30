@@ -145,6 +145,20 @@ namespace SPEe.Models
         /// </summary>
         public IList<TelegramaDestinatario> Destinatarios { get; set; }
 
+        /// <summary>
+        /// Tipo de Registro: 7 (sete). Dados do cedente do Bloqueto
+        /// </summary>
+        public BloquetoCedente Cedente { get; set; }
+        /// <summary>
+        /// Tipo de Registro: 8 (oito). Texto para Instruções de Pagamento do Bloqueto
+        /// </summary>
+        public BloquetoPagamento Pagamento { get; set; }
+
+        /// <summary>
+        /// Coleção do Tipo de Registro: 9 (nove). Dados do sacado do Bloqueto
+        /// </summary>
+        public IList<BloquetoSacado> Sacados { get; set; }
+
         #endregion Propriedades
 
         #region Construtor
@@ -156,6 +170,7 @@ namespace SPEe.Models
         {
             OID = new Random().Next(999999999);
             Destinatarios = new List<TelegramaDestinatario>();
+            Sacados = new List<BloquetoSacado>();
         }
 
         #endregion Construtor
@@ -163,7 +178,7 @@ namespace SPEe.Models
         /// <summary>
         /// Cria um registo de dados do telegrama e do remetente
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">Informações do telegrama do remetente</param>
         /// <returns></returns>
         public static TelegramaRemetente Create(TelegramaRemetente value)
         {
@@ -187,12 +202,18 @@ namespace SPEe.Models
             result.Usuario = value.Usuario?.Length > 40 ? value.Usuario?.Substring(0, 40) : value.Usuario;
             result.Internacional = value.Internacional;
             result.Texto = value.Texto;
+            value.Cedente.OID = result.OID;
+            result.Cedente = value.Cedente;
+            result.Pagamento = value.Pagamento;
 
             foreach (var destinatario in value.Destinatarios)
             {
                 destinatario.OID = result.OID;
                 result.Destinatarios.Add(destinatario);
             }
+
+            foreach (var sacado in value.Sacados)
+                result.Sacados.Add(sacado);
 
             return result;
         }

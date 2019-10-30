@@ -23,12 +23,12 @@ namespace SPEe.Models
         /// <summary>
         /// Número do documento
         /// </summary>
-        public int NumeroDocumento { get; set; }
+        public int? NumeroDocumento { get; set; }
 
         /// <summary>
         /// Data do documento. Informar no formato DD/MM/AAAA
         /// </summary>
-        public DateTime DataDocumento { get; set; }
+        public DateTime? DataDocumento { get; set; }
 
         /// <summary>
         /// Valor do documento. Os separadores de milhar serão desprezados(caracter ponto). O caracter decimal deve ser a vírgula
@@ -71,5 +71,32 @@ namespace SPEe.Models
         public string UsoBanco { get; set; }
 
         #endregion Propriedades
+
+        #region Métodos
+
+        /// <summary>
+        /// Cria um registro do tipo dados do sacado do bloqueto
+        /// </summary>
+        /// <param name="value">Informações do sacado do bloqueto</param>
+        /// <returns></returns>
+        public static BloquetoSacado Create(BloquetoSacado value)
+        {
+            return new BloquetoSacado
+            {
+                CodigoLinhaDigitavel = value.CodigoLinhaDigitavel?.Length > 47 ? value.CodigoLinhaDigitavel?.Substring(0, 47) : value.CodigoLinhaDigitavel,
+                NumeroDocumento = Convert.ToInt32(value.NumeroDocumento?.ToString().Substring(0, 17)),
+                DataDocumento = value.DataDocumento,
+                ValorDocumento = value.ValorDocumento,
+                EspecieDocumento = value.EspecieDocumento?.Length > 10 ? value.EspecieDocumento?.Substring(0, 10) : value.EspecieDocumento,
+                Aceite = value.Aceite?.Length > 1 ? value.Aceite?.Substring(0, 1) : value.Aceite,
+                NossoNumero = value.NossoNumero?.Length > 18 ? value.NossoNumero?.Substring(0, 18) : value.NossoNumero,
+                NossoNumeroDV = Convert.ToInt32(value.NossoNumeroDV.ToString().Substring(0, 1)),
+                DataProcessamento = value.DataProcessamento,
+                DataVencimento = value.DataVencimento,
+                UsoBanco = value.UsoBanco?.Length > 17 ? value.UsoBanco?.Substring(0,17) : value.UsoBanco
+            };
+        }
+
+        #endregion Métodos
     }
 }

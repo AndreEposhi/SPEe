@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -51,15 +52,16 @@ namespace SPEe.Models
             {
                 using (var file = new StreamWriter($@"D:\Temp\Arq{DateTime.Now.ToString("ddMMyyyyHHmmss")}.txt"))
                 {
-                    file.WriteLine(IdentificacaoRegistro.VersaoLayout == null ? 
+                    file.WriteLine(IdentificacaoRegistro.VersaoLayout == null ?
                         IdentificacaoRegistro.Tipo + ";" + IdentificacaoRegistro.DadoGeracaoArquivo :
-                        IdentificacaoRegistro.Tipo + ";" + IdentificacaoRegistro.DadoGeracaoArquivo + ";" + 
+                        IdentificacaoRegistro.Tipo + ";" + IdentificacaoRegistro.DadoGeracaoArquivo + ";" +
                         IdentificacaoRegistro.VersaoLayout);
 
                     foreach (var telegramaRemente in TelegramaRemetentes)
                         file.WriteLine(GerarRegistroTipo1(telegramaRemente));
 
                     foreach (var cartaRementente in CartaRemetentes)
+                        file.WriteLine(GerarRegistroTipo4(cartaRementente));
                 }
             }
             catch (Exception ex)
@@ -121,38 +123,73 @@ namespace SPEe.Models
             result.AppendLine();
             result.Append(value.Texto.Tipo + ";");
             result.Append(value.Texto.Texto);
-
             result.AppendLine();
 
-            foreach (var destinatario in value.Destinatarios)
+            if (value.Cedente != null)
             {
-                result.Append(destinatario.Tipo + ";");
-                result.Append(destinatario.OID + ";");
-                result.Append(destinatario.OIDContato + ";");
-                result.Append(destinatario.LiteralT + ";");
-                result.Append(destinatario.LiteralD + ";");
-                result.Append(destinatario.Nominal.Apelido == null ? " " + ";" : destinatario.Nominal.Apelido + ";");
-                result.Append(destinatario.Nominal.Titulo == null ? " " + ";" : destinatario.Nominal.Titulo + ";");
-                result.Append(destinatario.Nominal.Nome + ";");
-                result.Append(destinatario.Endereco.CEP + ";");
-                result.Append(destinatario.Endereco.Logradouro + ";");
-                result.Append(destinatario.Endereco.Numero + ";");
-                result.Append(destinatario.Endereco.Complemento == null ? " " + ";" : destinatario.Endereco.Complemento + ";");
-                result.Append(destinatario.Endereco.Bairro == null ? " " + ";" : destinatario.Endereco.Bairro + ";");
-                result.Append(destinatario.Endereco.Cidade + ";");
-                result.Append(destinatario.Endereco.UF + ";");
-                result.Append(destinatario.Endereco.Pais + ";");
-                result.Append(destinatario.Endereco.Provincia == null ? " " + ";" : destinatario.Endereco.Provincia + ";");
-                result.Append(destinatario.Telefone.DDD == null ? " " + ";" : destinatario.Telefone.DDD + ";");
-                result.Append(destinatario.Telefone.Numero == null ? " " + ";" : destinatario.Telefone.Numero + ";");
-                result.Append(destinatario.Email == null ? " " + ";" : destinatario.Email + ";");
-                result.Append(destinatario.NumeralUm + ";");
-                result.Append(destinatario.Telefone.DDDFax == null ? " " + ";" : destinatario.Telefone.DDDFax + ";");
-                result.Append(destinatario.Telefone.NumeroFax == null ? " " + ";" : destinatario.Telefone.NumeroFax + ";");
-                result.Append(destinatario.Endereco.CEPCxPostal == null ? " " + ";" : destinatario.Endereco.CEPCxPostal + ";");
-                result.Append(destinatario.Endereco.CaixaPostal == null ? " " + ";" : destinatario.Endereco.CaixaPostal + ";");
-                result.Append(destinatario.TipoDestino + ";");
-                result.Append(destinatario.LiteralN);
+                result.Append(value.Cedente.Tipo + ";");
+                result.Append(value.Cedente.OID + ";");
+                result.Append(value.Cedente.CodigoBanco + ";");
+                result.Append(value.Cedente.CodigoCarteira + ";");
+                result.Append(value.Cedente.TextoLocalPagamento + ";");
+                result.Append(value.Cedente.CodigoAgenciaCedente + ";");
+                result.Append(value.Cedente.CodigoAgenciaCedenteDV + ";");
+                result.Append(value.Cedente.CodigoCedente + ";");
+                result.Append(value.Cedente.CodigoCedenteDV + ";");
+
+                result.AppendLine();
+                result.Append(value.Pagamento.Tipo + ";");
+                result.Append(value.Pagamento.Instrucao);
+                result.AppendLine();
+            }
+
+            foreach (var tuple in value.Destinatarios.Zip(value.Sacados, (x, y) => (destinatario: x, sacado: y)))
+            {
+                result.Append(tuple.destinatario.Tipo + ";");
+                result.Append(tuple.destinatario.OID + ";");
+                result.Append(tuple.destinatario.OIDContato + ";");
+                result.Append(tuple.destinatario.LiteralT + ";");
+                result.Append(tuple.destinatario.LiteralD + ";");
+                result.Append(tuple.destinatario.Nominal.Apelido == null ? " " + ";" : tuple.destinatario.Nominal.Apelido + ";");
+                result.Append(tuple.destinatario.Nominal.Titulo == null ? " " + ";" : tuple.destinatario.Nominal.Titulo + ";");
+                result.Append(tuple.destinatario.Nominal.Nome + ";");
+                result.Append(tuple.destinatario.Endereco.CEP + ";");
+                result.Append(tuple.destinatario.Endereco.Logradouro + ";");
+                result.Append(tuple.destinatario.Endereco.Numero + ";");
+                result.Append(tuple.destinatario.Endereco.Complemento == null ? " " + ";" : tuple.destinatario.Endereco.Complemento + ";");
+                result.Append(tuple.destinatario.Endereco.Bairro == null ? " " + ";" : tuple.destinatario.Endereco.Bairro + ";");
+                result.Append(tuple.destinatario.Endereco.Cidade + ";");
+                result.Append(tuple.destinatario.Endereco.UF + ";");
+                result.Append(tuple.destinatario.Endereco.Pais + ";");
+                result.Append(tuple.destinatario.Endereco.Provincia == null ? " " + ";" : tuple.destinatario.Endereco.Provincia + ";");
+                result.Append(tuple.destinatario.Telefone.DDD == null ? " " + ";" : tuple.destinatario.Telefone.DDD + ";");
+                result.Append(tuple.destinatario.Telefone.Numero == null ? " " + ";" : tuple.destinatario.Telefone.Numero + ";");
+                result.Append(tuple.destinatario.Email == null ? " " + ";" : tuple.destinatario.Email + ";");
+                result.Append(tuple.destinatario.NumeralUm + ";");
+                result.Append(tuple.destinatario.Telefone.DDDFax == null ? " " + ";" : tuple.destinatario.Telefone.DDDFax + ";");
+                result.Append(tuple.destinatario.Telefone.NumeroFax == null ? " " + ";" : tuple.destinatario.Telefone.NumeroFax + ";");
+                result.Append(tuple.destinatario.Endereco.CEPCxPostal == null ? " " + ";" : tuple.destinatario.Endereco.CEPCxPostal + ";");
+                result.Append(tuple.destinatario.Endereco.CaixaPostal == null ? " " + ";" : tuple.destinatario.Endereco.CaixaPostal + ";");
+                result.Append(tuple.destinatario.TipoDestino + ";");
+                result.Append(tuple.destinatario.LiteralN);
+
+                if (tuple.sacado != null)
+                {
+                    result.AppendLine();
+                    result.Append(tuple.sacado.Tipo + ";");
+                    result.Append(tuple.sacado.CodigoLinhaDigitavel + ";");
+                    result.Append(tuple.sacado.NumeroDocumento == null ? " " + ";" : tuple.sacado.NumeroDocumento + ";");
+                    result.Append(tuple.sacado.DataDocumento == null ? " " + ";" : tuple.sacado.DataDocumento?.ToString("dd/MM/YYYY") + ";");
+                    result.Append(tuple.sacado.ValorDocumento + ";");
+                    result.Append(tuple.sacado.EspecieDocumento == null ? " " + ";" : tuple.sacado.EspecieDocumento);
+                    result.Append(tuple.sacado.Aceite + ";");
+                    result.Append(tuple.sacado.NossoNumero + ";");
+                    result.Append(tuple.sacado.NossoNumeroDV + ";");
+                    result.Append(tuple.sacado.DataProcessamento + ";");
+                    result.Append(tuple.sacado.DataVencimento + ";");
+                    result.Append(" " + ";");
+                    result.AppendLine();
+                }
             }
 
             return result;
@@ -211,35 +248,71 @@ namespace SPEe.Models
 
             result.AppendLine();
 
-            foreach (var destinatario in value.Destinatarios)
+            if (value.Cedente != null)
             {
-                result.Append(destinatario.Tipo + ";");
-                result.Append(destinatario.OID + ";");
-                result.Append(destinatario.OIDContato + ";");
-                result.Append(destinatario.LiteralC + ";");
-                result.Append(destinatario.LiteralD + ";");
-                result.Append(destinatario.Nominal.Apelido == null ? " " + ";" : destinatario.Nominal.Apelido + ";");
-                result.Append(destinatario.Nominal.Titulo == null ? " " + ";" : destinatario.Nominal.Titulo + ";");
-                result.Append(destinatario.Nominal.Nome + ";");
-                result.Append(destinatario.Endereco.CEP + ";");
-                result.Append(destinatario.Endereco.Logradouro + ";");
-                result.Append(destinatario.Endereco.Numero + ";");
-                result.Append(destinatario.Endereco.Complemento == null ? " " + ";" : destinatario.Endereco.Complemento + ";");
-                result.Append(destinatario.Endereco.Bairro == null ? " " + ";" : destinatario.Endereco.Bairro + ";");
-                result.Append(destinatario.Endereco.Cidade + ";");
-                result.Append(destinatario.Endereco.UF + ";");
-                result.Append(destinatario.Endereco.Pais + ";");
-                result.Append(destinatario.Endereco.Provincia == null ? " " + ";" : destinatario.Endereco.Provincia + ";");//Analisar
-                result.Append(destinatario.Telefone.DDD == null ? " " + ";" : destinatario.Telefone.DDD + ";");
-                result.Append(destinatario.Telefone.Numero == null ? " " + ";" : destinatario.Telefone.Numero + ";");
-                result.Append(destinatario.Email == null ? " " + ";" : destinatario.Email + ";");
-                result.Append(destinatario.NumeralUm + ";");
-                result.Append(destinatario.Telefone.DDDFax == null ? " " + ";" : destinatario.Telefone.DDDFax + ";");
-                result.Append(destinatario.Telefone.NumeroFax == null ? " " + ";" : destinatario.Telefone.NumeroFax + ";");
-                result.Append(destinatario.Endereco.CEPCxPostal == null ? " " + ";" : destinatario.Endereco.CEPCxPostal + ";");
-                result.Append(destinatario.Endereco.CaixaPostal == null ? " " + ";" : destinatario.Endereco.CaixaPostal + ";");
-                result.Append(destinatario.TipoDestino + ";");
-                result.Append(destinatario.LiteralN);
+                result.Append(value.Cedente.Tipo + ";");
+                result.Append(value.Cedente.OID + ";");
+                result.Append(value.Cedente.CodigoBanco + ";");
+                result.Append(value.Cedente.CodigoCarteira + ";");
+                result.Append(value.Cedente.TextoLocalPagamento + ";");
+                result.Append(value.Cedente.CodigoAgenciaCedente + ";");
+                result.Append(value.Cedente.CodigoAgenciaCedenteDV + ";");
+                result.Append(value.Cedente.CodigoCedente + ";");
+                result.Append(value.Cedente.CodigoCedenteDV + ";");
+
+                result.AppendLine();
+                result.Append(value.Pagamento.Tipo + ";");
+                result.Append(value.Pagamento.Instrucao);
+                result.AppendLine();
+            }
+
+            foreach (var tuple in value.Destinatarios.Zip(value.Sacados, (x, y) => (destinatario: x, sacado: y)))
+            {
+                result.Append(tuple.destinatario.Tipo + ";");
+                result.Append(tuple.destinatario.OID + ";");
+                result.Append(tuple.destinatario.OIDContato + ";");
+                result.Append(tuple.destinatario.LiteralC + ";");
+                result.Append(tuple.destinatario.LiteralD + ";");
+                result.Append(tuple.destinatario.Nominal.Apelido == null ? " " + ";" : tuple.destinatario.Nominal.Apelido + ";");
+                result.Append(tuple.destinatario.Nominal.Titulo == null ? " " + ";" : tuple.destinatario.Nominal.Titulo + ";");
+                result.Append(tuple.destinatario.Nominal.Nome + ";");
+                result.Append(tuple.destinatario.Endereco.CEP + ";");
+                result.Append(tuple.destinatario.Endereco.Logradouro + ";");
+                result.Append(tuple.destinatario.Endereco.Numero + ";");
+                result.Append(tuple.destinatario.Endereco.Complemento == null ? " " + ";" : tuple.destinatario.Endereco.Complemento + ";");
+                result.Append(tuple.destinatario.Endereco.Bairro == null ? " " + ";" : tuple.destinatario.Endereco.Bairro + ";");
+                result.Append(tuple.destinatario.Endereco.Cidade + ";");
+                result.Append(tuple.destinatario.Endereco.UF + ";");
+                result.Append(tuple.destinatario.Endereco.Pais + ";");
+                result.Append(tuple.destinatario.Endereco.Provincia == null ? " " + ";" : tuple.destinatario.Endereco.Provincia + ";");//Analisar
+                result.Append(tuple.destinatario.Telefone.DDD == null ? " " + ";" : tuple.destinatario.Telefone.DDD + ";");
+                result.Append(tuple.destinatario.Telefone.Numero == null ? " " + ";" : tuple.destinatario.Telefone.Numero + ";");
+                result.Append(tuple.destinatario.Email == null ? " " + ";" : tuple.destinatario.Email + ";");
+                result.Append(tuple.destinatario.NumeralUm + ";");
+                result.Append(tuple.destinatario.Telefone.DDDFax == null ? " " + ";" : tuple.destinatario.Telefone.DDDFax + ";");
+                result.Append(tuple.destinatario.Telefone.NumeroFax == null ? " " + ";" : tuple.destinatario.Telefone.NumeroFax + ";");
+                result.Append(tuple.destinatario.Endereco.CEPCxPostal == null ? " " + ";" : tuple.destinatario.Endereco.CEPCxPostal + ";");
+                result.Append(tuple.destinatario.Endereco.CaixaPostal == null ? " " + ";" : tuple.destinatario.Endereco.CaixaPostal + ";");
+                result.Append(tuple.destinatario.TipoDestino + ";");
+                result.Append(tuple.destinatario.LiteralN);
+
+                if (tuple.sacado != null)
+                {
+                    result.AppendLine();
+                    result.Append(tuple.sacado.Tipo + ";");
+                    result.Append(tuple.sacado.CodigoLinhaDigitavel + ";");
+                    result.Append(tuple.sacado.NumeroDocumento == null ? " " + ";" : tuple.sacado.NumeroDocumento + ";");
+                    result.Append(tuple.sacado.DataDocumento == null ? " " + ";" : tuple.sacado.DataDocumento?.ToString("dd/MM/YYYY") + ";");
+                    result.Append(tuple.sacado.ValorDocumento + ";");
+                    result.Append(tuple.sacado.EspecieDocumento == null ? " " + ";" : tuple.sacado.EspecieDocumento);
+                    result.Append(tuple.sacado.Aceite + ";");
+                    result.Append(tuple.sacado.NossoNumero + ";");
+                    result.Append(tuple.sacado.NossoNumeroDV + ";");
+                    result.Append(tuple.sacado.DataProcessamento + ";");
+                    result.Append(tuple.sacado.DataVencimento + ";");
+                    result.Append(" " + ";");
+                    result.AppendLine();
+                }
             }
 
             return result;
