@@ -202,9 +202,6 @@ namespace SPEe.Models
             result.Usuario = value.Usuario?.Length > 40 ? value.Usuario?.Substring(0, 40) : value.Usuario;
             result.Internacional = value.Internacional;
             result.Texto = value.Texto;
-            value.Cedente.OID = result.OID;
-            result.Cedente = value.Cedente;
-            result.Pagamento = value.Pagamento;
 
             foreach (var destinatario in value.Destinatarios)
             {
@@ -212,8 +209,15 @@ namespace SPEe.Models
                 result.Destinatarios.Add(destinatario);
             }
 
-            foreach (var sacado in value.Sacados)
-                result.Sacados.Add(sacado);
+            if (value.Cedente != null)
+            {
+                value.Cedente.OID = result.OID;
+                result.Cedente = value.Cedente;
+                result.Pagamento = value.Pagamento;
+
+                foreach (var sacado in value.Sacados)
+                    result.Sacados.Add(sacado);
+            }
 
             return result;
         }

@@ -23,7 +23,7 @@ namespace SPEe.Models
         /// <summary>
         /// Número do documento
         /// </summary>
-        public int? NumeroDocumento { get; set; }
+        public long? NumeroDocumento { get; set; }
 
         /// <summary>
         /// Data do documento. Informar no formato DD/MM/AAAA
@@ -84,9 +84,9 @@ namespace SPEe.Models
             return new BloquetoSacado
             {
                 CodigoLinhaDigitavel = value.CodigoLinhaDigitavel?.Length > 47 ? value.CodigoLinhaDigitavel?.Substring(0, 47) : value.CodigoLinhaDigitavel,
-                NumeroDocumento = Convert.ToInt32(value.NumeroDocumento?.ToString().Substring(0, 17)),
+                NumeroDocumento = value.NumeroDocumento?.ToString().Length > 17 ? Convert.ToInt64(value.NumeroDocumento?.ToString().Substring(0,17)) : value.NumeroDocumento,
                 DataDocumento = value.DataDocumento,
-                ValorDocumento = value.ValorDocumento,
+                ValorDocumento = Convert.ToDouble(value.ValorDocumento.ToString().Replace(".", ",")),
                 EspecieDocumento = value.EspecieDocumento?.Length > 10 ? value.EspecieDocumento?.Substring(0, 10) : value.EspecieDocumento,
                 Aceite = value.Aceite?.Length > 1 ? value.Aceite?.Substring(0, 1) : value.Aceite,
                 NossoNumero = value.NossoNumero?.Length > 18 ? value.NossoNumero?.Substring(0, 18) : value.NossoNumero,

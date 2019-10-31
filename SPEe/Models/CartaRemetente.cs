@@ -198,8 +198,15 @@ namespace SPEe.Models
                 result.Destinatarios.Add(destinatario);
             }
 
-            foreach (var sacado in value.Sacados)
-                result.Sacados.Add(sacado);
+            if (value.Cedente != null)
+            {
+                value.Cedente.OID = result.OID;
+                result.Cedente = value.Cedente;
+                result.Pagamento = value.Pagamento;
+
+                foreach (var sacado in value.Sacados)
+                    result.Sacados.Add(sacado);
+            }
 
             return result;
         }
