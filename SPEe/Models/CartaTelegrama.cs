@@ -50,7 +50,10 @@ namespace SPEe.Models
         {
             try
             {
-                using (var file = new StreamWriter($@"D:\Temp\Arq{DateTime.Now.ToString("ddMMyyyyHHmmss")}.txt"))
+                if (!Directory.Exists(@"C:\Temp"))
+                    Directory.CreateDirectory(@"C:\Temp");
+
+                using (var file = new StreamWriter($@"C:\Temp\Arq{DateTime.Now.ToString("ddMMyyyyHHmmss")}.txt"))
                 {
                     file.WriteLine(IdentificacaoRegistro.VersaoLayout == null ?
                         IdentificacaoRegistro.Tipo + ";" + IdentificacaoRegistro.DadoGeracaoArquivo :
@@ -117,7 +120,13 @@ namespace SPEe.Models
             result.Append(value.RetornoServico == null ? " " + ";" : value.RetornoServico + ";");
             result.Append(value.NumeralZero + ";");
             result.Append(value.Usuario == null ? " " + ";" : value.Usuario + ";");
+            result.Append(" ;");
+            result.Append(value.LiteralBR + ";");
+            result.Append(" ;");
+            result.Append(" ;");
             result.Append(value.LiteralN + ";");
+            result.Append(" ;");
+            result.Append(" ;");
             result.Append(value.Internacional == true ? 1 : 0);
 
             result.AppendLine();
